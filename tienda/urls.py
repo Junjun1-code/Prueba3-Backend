@@ -15,8 +15,6 @@ urlpatterns = [
 
     # LIST
     path('', views.rating_list, name='list_ratings'),
-    # DETAIL
-    path('articulo/<int:pk>/', views.rating_detail, name='detail_ratings'),
     # CREATE
     path('articulo/nuevo/', views.rating_post, name='make_ratings'),
     # UPDATE

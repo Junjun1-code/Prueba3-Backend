@@ -13,7 +13,7 @@ class ItemForm(forms.ModelForm):
             'price': forms.TextInput(attrs={
                 'class': 'form-control',
                 'rows': 1,
-                'placeholder': 'Escribe precio aquí...'
+                'placeholder': 'Escribe el precio aquí...'
             }),
             'published': forms.CheckboxInput(attrs={
                 'class': 'form-check-input'
