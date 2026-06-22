@@ -39,16 +39,25 @@ class RatingForm(forms.ModelForm):
             #     'placeholder': (f'{rateditem}')
             # })
 
-            'stars': forms.ChoiceField(attrs={
-                # 'class': 'form-check-input'
-                'placeholder': '¿Como calificas este producto?'
-            }),
+            'stars': forms.Select(
+                choices=[
+                    ('', '¿Como calificas este producto?'),
+                    (1, '1 ⭐'),
+                    (2, '2 ⭐⭐'),
+                    (3, '3 ⭐⭐⭐'),
+                    (4, '4 ⭐⭐⭐⭐'),
+                    (5, '5 ⭐⭐⭐⭐⭐'),
+                ],    
+                attrs={
+                    'class': 'form-select',
+                }),
 
             'comments': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placehloder': 'Agrega comentarios sobre el producto'
+                'placeholder': 'Agrega comentarios sobre el producto'
             }),
         }
         labels = {
-            'stars': 'Calificación'
+            'stars': 'Calificación',
+            'comments': 'Comentario'
         }
