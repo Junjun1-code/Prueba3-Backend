@@ -1,0 +1,32 @@
+{% extends 'tienda/base.html' %}
+{% block titulo %}{{ Item.itemname }}{% endblock %}
+{% block price %}
+<article>
+    <h1>{{ Item.itemname }}</h1>
+    <p class="text-muted">
+        Por <strong>{{ Item.author.username }}</strong> ·
+        {{ Item.fecha_creacion|date:"d \de F \de Y" }}
+        {% if not Item.published %}
+            <span class="badge bg-warning text-dark">Borrador</span>
+        {% endif %}
+    </p>
+    <hr>
+    <div class="mt-3">{{ Item.stock|linebreaks }}</div>
+    {% if Item.stock > 0 %}
+    <div class="mt-3">{{ Item.price|linebreaks }}</div>
+    {% else %}
+    <div class="mt-3"> Articulo sin stock </div>
+    {% endif %}
+
+</article>
+
+{% if user == Item.author %}
+<div class="mt-4 d-flex gap-2">
+    <a href="{% url 'edit_items' Item.pk %}" class="btn btn-outline-secondary">Editar</a>
+    <a href="{% url 'remove_items' Item.pk %}" class="btn btn-outline-danger">Eliminar</a>
+</div>
+{% endif %}
+
+<a href="{% url 'list_items' %}" class="btn btn-link mt-3">← Volver a la lista</a>
+{% endblock %}
+{% extends 'tienda/ratings'}
