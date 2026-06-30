@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Item
 from .forms import ItemForm, RatingForm
+from django.db.models import Avg
 
 # ++ Articulos para el catalogo ++++++++++++++++++++++++
 
@@ -69,11 +70,14 @@ def item_remove(request, pk):
 
 # ++ Valoraciones de los articulos +++++++++++++++++++++++++++++++
 
-# # # ── LIST: Ver todos los artículos ────────────────────────────────────────────
-# def rating_list(request, pk):
-#     Item = get_object_or_404(Item, pk=pk)
+# # ── LIST: Ver todos los artículos ────────────────────────────────────────────
+def rating_list(request, pk):
 
-#     return render(request, 'tienda/items.html',)
+    items = Item.objects.annotate(
+        average_rating=Avg("Rating.stars")
+    )
+
+    return render(request, 'tienda/items.html',)
 
 # # def rating_list(request):
 # #     """Página pública: muestra artículos publicados. 
@@ -101,18 +105,18 @@ def rating_post(request):
     return render(request, 'tienda/form.html', {'form': form, 'accion': 'Crear'})
 
 # # ── UPDATE: Editar valoracion ────────────────────────────────────────────────
-# @login_required
-# def rating_edit(request, pk):
-#     Rating = get_object_or_404(Rating, pk=pk, author=request.user)  # solo el autor puede editar
-#     if request.method == 'POST':
-#         form = RatingForm(request.POST, instance=Rating)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, '¡Artículo actualizado!')
-#             return redirect('detalle_Item', pk=Item.pk)
-#     else:
-#         form = RatingForm(instance=Item)
-#     return render(request, 'tienda/form.html', {'form': form, 'accion': 'Editar', 'Item': Item})
+@login_required
+def rating_edit(request, pk):
+    Rating = get_object_or_404(Rating, pk=pk, author=request.user)  # solo el autor puede editar
+    if request.method == 'POST':
+        form = RatingForm(request.POST, instance=Rating)
+        if form.is_valid():
+            form.save()
+            messages.success(request, '¡Artículo actualizado!')
+            return redirect('detalle_Item', pk=Item.pk)
+    else:
+        form = RatingForm(instance=Item)
+    return render(request, 'tienda/form.html', {'form': form, 'accion': 'Editar', 'Item': Item})
 
 # ── DELETE: Eliminar valoracuib ──────────────────────────────────────────────
 @login_required

@@ -1,4 +1,4 @@
-{% extends 'tienda/base.html' %}
+<!-- {% extends 'tienda/base.html' %}
 {% block titulo %}Artículos{% endblock %}
 {% block Item %}
 <h1 class="mb-4">Artículos</h1>
@@ -37,4 +37,123 @@
         {% endif %}
     </div>
 {% endif %}
+{% endblock %} -->
+
+
+{% extends 'tienda/base.html' %}
+
+{% block titulo %}Artículos{% endblock %}
+
+{% block Item %}
+
+<h1 class="mb-4">Artículos</h1>
+
+{% if Item %}
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+
+        {% for I in Item %}
+        <div class="col">
+
+            <div class="card h-100 shadow rounded-4 border-0">
+
+                <!-- Imagen -->
+                {% if I.image %}
+                <img src="{{ I.image.url }}" class="card-img-top"
+                     style="height:250px; object-fit:cover;">
+                {% else %}
+                <img src="https://via.placeholder.com/400x250"
+                     class="card-img-top"
+                     style="height:250px; object-fit:cover;">
+                {% endif %}
+
+                <!-- Precio -->
+                <div class="text-center mt-2">
+                    <span class="badge bg-dark fs-6">
+                        ${{ I.price }}
+                    </span>
+                    <span class="badge bg-dark fs-4">
+                        {{ I.average_rating|floatformat:1 }}
+                    </span>
+                </div>
+
+                <!-- Información -->
+                <div class="card-body text-center">
+
+                    <h4 class="fw-bold">
+                        {{ I.itemname }}
+                    </h4>
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <small>
+                            <strong>Stock:</strong>
+                            {{ I.stock }}
+                        </small>
+
+                        <small>
+                            {{ I.author.username }}
+                        </small>
+                    </div>
+
+                    {% if not I.published %}
+                    <div class="mt-2">
+                        <span class="badge bg-warning text-dark">
+                            Borrador
+                        </span>
+                    </div>
+                    {% endif %}
+
+                </div>
+
+                <!-- Footer -->
+                <div class="card-footer bg-white border-0">
+
+                    <div class="d-grid mb-2">
+                        <a href="{% url 'detail_items' I.pk %}"
+                           class="btn btn-success">
+                            Details
+                        </a>
+                    </div>
+
+                    {% if user == I.author %}
+                    <div class="d-flex justify-content-between">
+
+                        <a href="{% url 'edit_items' I.pk %}"
+                           class="btn btn-outline-primary btn-sm">
+                            Editar
+                        </a>
+
+                        <a href="{% url 'remove_items' I.pk %}"
+                           class="btn btn-outline-danger btn-sm">
+                            Eliminar
+                        </a>
+
+                    </div>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% else %}
+
+<div class="alert alert-info">
+    No hay artículos disponibles.
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'post_items' %}">
+            ¡Crea el primero!
+        </a>
+    {% endif %}
+</div>
+
+{% endif %}
+
 {% endblock %}
