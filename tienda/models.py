@@ -10,7 +10,7 @@ class Item(models.Model):
         validators=[
             MinValueValidator(0)
     ])
-    img = models.CharField(max_length=100)
+    img = models.ImageField(max_length=100)
     author = models.ForeignKey(
         User,
         on_delete = models.CASCADE,

@@ -1,45 +1,3 @@
-<!-- {% extends 'tienda/base.html' %}
-{% block titulo %}Artículos{% endblock %}
-{% block Item %}
-<h1 class="mb-4">Artículos</h1>
-
-{% if Item %}
-    <div class="row row-cols-1 row-cols-md-2 g-4">
-    {% for I in Item %}
-        <div class="col">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">{{ I.itemname }}</h5>
-                    <p class="card-text text-muted">
-                        Por {{ I.author.username }} · {{ I.fecha_creacion|date:"d/m/Y" }}
-                        {% if not I.published %}
-                            <span class="badge bg-warning text-dark ms-2">Borrador</span>
-                        {% endif %}
-                    </p>
-                    <p class="card-text">{{ I.contenido|truncatewords:30 }}</p>
-                </div>
-                <div class="card-footer d-flex gap-2">
-                    <a href="{% url 'detail_items' I.pk %}" class="btn btn-primary btn-sm">Leer más</a>
-                    {% if user == I.author %}
-                        <a href="{% url 'edit_items' I.pk %}" class="btn btn-outline-secondary btn-sm">Editar</a>
-                        <a href="{% url 'remove_items' I.pk %}" class="btn btn-outline-danger btn-sm">Eliminar</a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    {% endfor %}
-    </div>
-{% else %}
-    <div class="alert alert-info">
-        No hay artículos disponibles.
-        {% if user.is_authenticated %}
-            <a href="{% url 'post_items' %}">¡Crea el primero!</a>
-        {% endif %}
-    </div>
-{% endif %}
-{% endblock %} -->
-
-
 {% extends 'tienda/base.html' %}
 
 {% block titulo %}Artículos{% endblock %}
@@ -59,13 +17,9 @@
             <div class="card h-100 shadow rounded-4 border-0">
 
                 <!-- Imagen -->
-                {% if I.image %}
-                <img src="{{ I.image.url }}" class="card-img-top"
-                     style="height:250px; object-fit:cover;">
-                {% else %}
-                <img src="https://via.placeholder.com/400x250"
-                     class="card-img-top"
-                     style="height:250px; object-fit:cover;">
+                {% if I.img %}
+                <img src="{{ I.img.url }}" class="card-img-top"
+                    style="height:250px; object-fit:cover;">
                 {% endif %}
 
                 <!-- Precio -->

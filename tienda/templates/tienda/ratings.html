@@ -4,18 +4,18 @@
     <h1>{{ Rating.author }}</h1>
     <p class="text-muted">
         Por <strong>{{ Rating.author.username }}</strong> ·
-        {{ Item.fecha_creacion|date:"d \de F \de Y" }}
-        {% if not Item.published %}
-            <span class="badge bg-warning text-dark">Borrador</span>
-        {% endif %}
     </p>
     <hr>
     <!-- <div class="mt-3">{{ Rating.stars |linebreaks }}</div> -->
-    <div class="mt-3">{ % text % } {{ For i in (Rating.stars) { text += ⭐ } |linebreaks }}</div>
+    <div class="mt-3">
+        {% for _ in Rating.range %}
+        ⭐
+        {% endfor %}
+    </div>
     <div class="mt-3">{{ Rating.comments|linebreaks }}</div>
 </article>
 
-{% if user == Rating.author %}
+{% if User == Rating.author %}
 <div class="mt-4 d-flex gap-2">
     <a href="{% url 'edit_ratings' Rating.pk %}" class="btn btn-outline-secondary">Editar</a>
     <a href="{% url 'remove_ratings' Rating.pk %}" class="btn btn-outline-danger">Eliminar</a>

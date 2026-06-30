@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Item
+from .models import Item, Rating
 from .forms import ItemForm, RatingForm
 from django.db.models import Avg
 
@@ -70,23 +70,16 @@ def item_remove(request, pk):
 
 # ++ Valoraciones de los articulos +++++++++++++++++++++++++++++++
 
-# # ── LIST: Ver todos los artículos ────────────────────────────────────────────
+# # ── LIST: Obtener todas las valoraciones ────────────────────────────────────────────
 def rating_list(request, pk):
-
     items = Item.objects.annotate(
         average_rating=Avg("Rating.stars")
     )
+    # return render(request, 'tienda/items.html',)
 
-    return render(request, 'tienda/items.html',)
-
-# # def rating_list(request):
-# #     """Página pública: muestra artículos publicados. 
-# #        Si el usuario está autenticado, también ve los suyos sin publicar."""
-# #     if request.user.is_authenticated:
-# #         items = Item.objects.filter(author=request.user)
-# #     items = Item.objects.filter(published=True)
-# #     return render(request, 'blog/lista.html', {'Items': items})
-
+def rating_star(request):
+    for rating in Rating:
+        rating.range = range(Rating.stars)
 
 # ── CREATE: Crear valoracion ────────────────────────────────────────────────
 @login_required  # solo usuarios autenticados pueden crear
@@ -94,10 +87,10 @@ def rating_post(request):
     if request.method == 'POST':
         form = RatingForm(request.POST)
         if form.is_valid():
-            Item = form.save(commit=False)  # no guarda aún en BD
-            Item.autor = request.user       # asigna el usuario actual
-            Item.pk += request.pk           # asigna el articulo a valorar
-            Item.save()
+            Rating = form.save(commit=False)  # no guarda aún en BD
+            Rating.autor = request.user       # asigna el usuario actual
+            Rating.pk += request.pk           # asigna el articulo a valorar
+            Rating.save()
             messages.success(request, '¡Artículo valorado exitosamente!')
             return redirect('detalle_Item', pk=Item.pk)
     else:
