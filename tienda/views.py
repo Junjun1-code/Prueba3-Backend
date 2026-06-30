@@ -14,7 +14,7 @@ def item_list(request):
     if request.user.is_authenticated:
         items = Item.objects.filter(author=request.user)
     items = Item.objects.filter(published=True)
-    return render(request, 'tienda/items.html', {'Items': items})
+    return render(request, 'tienda/item.html', {'Items': items})
 
 # ── DETAIL: Ver un artículo ────────────────────────────────────────────────
 def item_detail(request, pk):
@@ -72,14 +72,17 @@ def item_remove(request, pk):
 
 # # ── LIST: Obtener todas las valoraciones ────────────────────────────────────────────
 def rating_list(request, pk):
-    items = Item.objects.annotate(
-        average_rating=Avg("Rating.stars")
-    )
-    # return render(request, 'tienda/items.html',)
+    item = get_object_or_404(Item, pk=pk)
 
-def rating_star(request):
-    for rating in Rating:
-        rating.range = range(Rating.stars)
+    ratings = Rating.objects.filter(rateditem=item)
+
+    for rating in ratings:
+        rating.range = range(rating.stars)
+
+    return render(request, "tienda/item.html", {
+        "Item": item,
+        "Ratings": ratings,
+    })
 
 # ── CREATE: Crear valoracion ────────────────────────────────────────────────
 @login_required  # solo usuarios autenticados pueden crear

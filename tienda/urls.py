@@ -16,9 +16,9 @@ urlpatterns = [
     # LIST
     path('', views.rating_list, name='list_ratings'),
     # CREATE
-    path('articulo/nuevo/', views.rating_post, name='make_ratings'),
+    path('rating/new/', views.rating_post, name='make_ratings'),
     # UPDATE
-    path('articulo/<int:pk>/editar/', views.rating_edit, name='edit_ratings'),
+    path('rating/<int:pk>/edit/', views.rating_edit, name='edit_ratings'),
     # DELETE
-    path('articulo/<int:pk>/eliminar/', views.rating_remove, name='remove_ratings'),
+    path('rating/<int:pk>/remove/', views.rating_remove, name='remove_ratings'),
 ]

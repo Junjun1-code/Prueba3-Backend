@@ -17,6 +17,9 @@
     {% else %}
     <div class="mt-3"> Articulo sin stock </div>
     {% endif %}
+    <span class="badge bg-dark fs-4">
+        {{ Item.average_rating|floatformat:1 }}
+    </span>
 
 </article>
 
