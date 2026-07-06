@@ -10,7 +10,7 @@ class Item(models.Model):
         validators=[
             MinValueValidator(0)
     ])
-    img = models.ImageField(max_length=100)
+    img = models.CharField(max_length=100)
     author = models.ForeignKey(
         User,
         on_delete = models.CASCADE,
@@ -31,7 +31,7 @@ class Rating(models.Model):
     rateditem = models.ForeignKey(
         Item,
         on_delete = models.CASCADE,
-        related_name = 'Items'
+        related_name = 'ratings'
     )
     stars = models.IntegerField(
         validators=[
@@ -46,6 +46,6 @@ class Rating(models.Model):
     )
 
     def __str__(self):
-        return self.rateditem
+        return self.rateditem.itemname
 
 # Create your models here.

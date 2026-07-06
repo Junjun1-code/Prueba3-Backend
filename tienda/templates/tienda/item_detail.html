@@ -1,6 +1,6 @@
 {% extends 'tienda/base.html' %}
 {% block titulo %}{{ Item.itemname }}{% endblock %}
-{% block price %}
+{% block contenido %}
 <article>
     <h1>{{ Item.itemname }}</h1>
     <p class="text-muted">
@@ -18,7 +18,11 @@
     <div class="mt-3"> Articulo sin stock </div>
     {% endif %}
     <span class="badge bg-dark fs-4">
-        {{ Item.average_rating|floatformat:1 }}
+        {% if Item.average_rating %}
+        {{ Item.average_rating|floatformat:1 }} ⭐
+        {% else %}
+        / ⭐
+        {%endif%}
     </span>
 
 </article>
@@ -32,4 +36,16 @@
 
 <a href="{% url 'list_items' %}" class="btn btn-link mt-3">← Volver a la lista</a>
 {% endblock %}
-{% extends 'tienda/ratings'}
+
+{% block Ratings %}
+    <main class="container mt-4">
+
+
+    </main>
+{% endblock %}
+
+{% extends 'tienda/ratings.html' %}
+<Main>
+    {% Block Ratings %}
+    {% endblock %}
+</Main>

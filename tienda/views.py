@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Item, Rating
-from .forms import ItemForm, RatingForm
+from .models import Item , Rating
+from .forms import ItemForm , RatingForm
 from django.db.models import Avg
 
 # ++ Articulos para el catalogo ++++++++++++++++++++++++
@@ -14,20 +14,20 @@ def item_list(request):
     if request.user.is_authenticated:
         items = Item.objects.filter(author=request.user)
     items = Item.objects.filter(published=True)
-    return render(request, 'tienda/item.html', {'Items': items})
+    return render(request, 'tienda/item.html', {'Item': items})
 
 # ── DETAIL: Ver un artículo ────────────────────────────────────────────────
 def item_detail(request, pk):
-    Item = get_object_or_404(Item, pk=pk)
+    item = get_object_or_404(Item, pk=pk)
     # Solo el autor puede ver sus artículos no publicados
-    if not Item.published and Item.author != request.user:
+    if not item.published and item.author != request.user:
         messages.error(request, 'Este artículo no está disponible.')
         return redirect('list_items')
     
-    # Ratings = get_object_or_404(Ratings, fk=pk )
+    # rating = get_object_or_404(Ratings, fk=pk )
     # return render(request, 'blog/detalle.html', {'Item': Item, 'Ratings': Ratings })
     
-    return render(request, 'tienda/detalle.html', {'Item': Item})
+    return render(request, 'tienda/item_detail.html', {'Item': item})
 
 # ── CREATE: Crear artículo ────────────────────────────────────────────────
 @login_required  # solo usuarios autenticados pueden crear
@@ -42,7 +42,7 @@ def item_post(request):
             return redirect('detalle_Item', pk=Item.pk)
     else:
         form = ItemForm()
-    return render(request, 'tienda/form.html', {'form': form, 'accion': 'Crear'})
+    return render(request, 'tienda/item_form.html', {'form': form, 'accion': 'Crear'})
 # ── UPDATE: Editar artículo ────────────────────────────────────────────────
 @login_required
 def item_edit(request, pk):
@@ -68,7 +68,7 @@ def item_remove(request, pk):
     return render(request, 'tienda/confirmar_eliminar.html', {'Item': Item})
 
 
-# ++ Valoraciones de los articulos +++++++++++++++++++++++++++++++
+# # ++ Valoraciones de los articulos +++++++++++++++++++++++++++++++
 
 # # ── LIST: Obtener todas las valoraciones ────────────────────────────────────────────
 def rating_list(request, pk):
