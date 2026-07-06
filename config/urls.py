@@ -24,7 +24,7 @@ urlpatterns = [
 
     # Autenticación nativa de Django (login / logout)
     path('accounts/login/', auth_views.LoginView.as_view(template_name='tienda/login.html'), name='login'),
-    path('accounts/logout/', auth_views.LogoutView.as_view(next_page='lista_articulos'), name='logout'),
+    path('accounts/logout/', auth_views.LogoutView.as_view(next_page='list_ite'), name='logout'),
 
     # App blog en la raíz
     path('', include('tienda.urls')),

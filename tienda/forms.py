@@ -4,16 +4,19 @@ from .models import Item , Rating
 class ItemForm(forms.ModelForm):
     class Meta:
         model = Item
-        fields = ['itemname', 'price', 'published', 'img']
+        fields = ['itemname', 'price', 'stock', 'published', 'img']
         widgets = {
             'itemname': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Ingresa el nombre de tu artículo a vender'
             }),
-            'price': forms.TextInput(attrs={
+            'price': forms.NumberInput(attrs={
                 'class': 'form-control',
-                'rows': 1,
                 'placeholder': 'Escribe el precio aquí...'
+            }),
+            'stock': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Escribe el stock aquí...'
             }),
             'published': forms.CheckboxInput(attrs={
                 'class': 'form-check-input'
@@ -26,6 +29,7 @@ class ItemForm(forms.ModelForm):
         labels = {
             'itemname': 'Nombre del articulo',
             'price': 'Valor',
+            'stock': 'Stock',
             'published': '¿Publicar artículo?',
             'img': 'Imagen'
         }

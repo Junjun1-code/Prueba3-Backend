@@ -116,3 +116,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = 'static/'
+LOGIN_REDIRECT_URL = '/'       # a donde va al hacer login exitoso
+LOGIN_URL = '/accounts/login/' # página de login para @login_required

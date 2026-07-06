@@ -46,16 +46,16 @@ def item_post(request):
 # ── UPDATE: Editar artículo ────────────────────────────────────────────────
 @login_required
 def item_edit(request, pk):
-    Item = get_object_or_404(Item, pk=pk, author=request.user)  # solo el autor puede editar
+    item = get_object_or_404(Item, pk=pk, author=request.user)  # solo el autor puede editar
     if request.method == 'POST':
-        form = ItemForm(request.POST, instance=Item)
+        form = ItemForm(request.POST, instance=item)
         if form.is_valid():
             form.save()
             messages.success(request, '¡Artículo actualizado!')
-            return redirect('detalle_Item', pk=Item.pk)
+            return redirect('detalle_Item', pk=item.pk)
     else:
-        form = ItemForm(instance=Item)
-    return render(request, 'tienda/form.html', {'form': form, 'accion': 'Editar', 'Item': Item})
+        form = ItemForm(instance=item)
+    return render(request, 'tienda/form.html', {'form': form, 'accion': 'Editar', 'Item': item})
 
 # ── DELETE: Eliminar artículo ──────────────────────────────────────────────
 @login_required
