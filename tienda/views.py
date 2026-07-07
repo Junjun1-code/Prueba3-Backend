@@ -12,8 +12,9 @@ def item_list(request):
     """Página pública: muestra artículos publicados. 
        Si el usuario está autenticado, también ve los suyos sin publicar."""
     if request.user.is_authenticated:
-        items = Item.objects.filter(author=request.user)
-    items = Item.objects.filter(published=True)
+        items = Item.objects.filter(author=request.user) | Item.objects.filter(published=True)
+    else:
+        items = Item.objects.filter(published=True)
     return render(request, 'tienda/item.html', {'Item': items})
 
 # ── DETAIL: Ver un artículo ────────────────────────────────────────────────
@@ -76,19 +77,20 @@ def item_remove(request, pk):
 
 # ── CREATE: Crear valoracion ────────────────────────────────────────────────
 @login_required  # solo usuarios autenticados pueden crear
-def rating_post(request):
+def rating_post(request, pk):
+    item = get_object_or_404(Item, pk=pk)
     if request.method == 'POST':
         form = RatingForm(request.POST)
         if form.is_valid():
             Rating = form.save(commit=False)  # no guarda aún en BD
+            Rating.rateditem = item
             Rating.author = request.user       # asigna el usuario actual
-            Rating.pk += request.pk           # asigna el articulo a valorar
             Rating.save()
             messages.success(request, '¡Artículo valorado exitosamente!')
-            return redirect('detalle_Item', pk=Item.pk)
+            return redirect('detail_items', pk=item.pk)
     else:
         form = RatingForm()
-    return render(request, 'tienda/rating_form.html', {'form': form, 'accion': 'Crear'})
+    return render(request, 'tienda/rating_form.html', {'form': form, 'accion': 'Crear', 'Item': item})
 
 # # ── UPDATE: Editar valoracion ────────────────────────────────────────────────
 @login_required

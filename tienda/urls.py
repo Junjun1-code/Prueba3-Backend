@@ -14,7 +14,7 @@ urlpatterns = [
     path('item/<int:pk>/remove/', views.item_remove, name='remove_items'),
 
     # CREATE
-    path('rating/new/', views.rating_post, name='make_ratings'),
+    path('rating/new/<int:pk>/', views.rating_post, name='post_ratings'),
     # UPDATE
     path('rating/<int:pk>/edit/', views.rating_edit, name='edit_ratings'),
     # DELETE

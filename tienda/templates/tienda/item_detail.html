@@ -36,6 +36,11 @@
 {% endif %}
 
 <a href="{% url 'list_items' %}" class="btn btn-link mt-3">← Volver a la lista</a>
+{% if user != Item.author %}
+<div class="mt-4 d-flex gap-2">
+    <a href="{% url 'post_ratings' Item.pk %}" class="btn btn-outline-secondary">Valorar articulo</a>
+</div>
+{% endif %}
 
 {% if Ratings %}
 <section class="container mt-4">
