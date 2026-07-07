@@ -13,8 +13,6 @@ urlpatterns = [
     # DELETE
     path('item/<int:pk>/remove/', views.item_remove, name='remove_items'),
 
-    # LIST
-    path('', views.rating_list, name='list_ratings'),
     # CREATE
     path('rating/new/', views.rating_post, name='make_ratings'),
     # UPDATE

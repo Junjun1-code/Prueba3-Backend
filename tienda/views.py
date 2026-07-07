@@ -37,10 +37,10 @@ def item_post(request):
         form = ItemForm(request.POST)
         if form.is_valid():
             Item = form.save(commit=False)  # no guarda aún en BD
-            Item.autor = request.user       # asigna el usuario actual
+            Item.author = request.user       # asigna el usuario actual
             Item.save()
             messages.success(request, '¡Artículo creado exitosamente!')
-            return redirect('detalle_Item', pk=Item.pk)
+            return redirect('detail_items', pk=Item.pk)
     else:
         form = ItemForm()
     return render(request, 'tienda/item_form.html', {'form': form, 'accion': 'Crear'})
@@ -53,37 +53,26 @@ def item_edit(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, '¡Artículo actualizado!')
-            return redirect('detalle_Item', pk=item.pk)
+            return redirect('detail_items', pk=item.pk)
     else:
         form = ItemForm(instance=item)
-    return render(request, 'tienda/form.html', {'form': form, 'accion': 'Editar', 'Item': item})
+    return render(request, 'tienda/item_form.html', {'form': form, 'accion': 'Editar', 'Item': item})
 
 # ── DELETE: Eliminar artículo ──────────────────────────────────────────────
 @login_required
 def item_remove(request, pk):
-    Item = get_object_or_404(Item, pk=pk, author=request.user)
+    item = get_object_or_404(Item, pk=pk, author=request.user)
     if request.method == 'POST':
-        Item.delete()
+        item.delete()
         messages.success(request, 'Artículo eliminado.')
-        return redirect('lista_Items')
-    return render(request, 'tienda/confirmar_eliminar.html', {'Item': Item})
+        return redirect('list_items')
+    return render(request, 'tienda/remove_confirm_item.html', {'Item': item})
 
 
 # # ++ Valoraciones de los articulos +++++++++++++++++++++++++++++++
 
 # # ── LIST: Obtener todas las valoraciones ────────────────────────────────────────────
-def rating_list(request, pk):
-    item = get_object_or_404(Item, pk=pk)
 
-    ratings = Rating.objects.filter(rateditem=item)
-
-    for rating in ratings:
-        rating.range = range(rating.stars)
-
-    return render(request, "tienda/item.html", {
-        "Item": item,
-        "Ratings": ratings,
-    })
 
 # ── CREATE: Crear valoracion ────────────────────────────────────────────────
 @login_required  # solo usuarios autenticados pueden crear
@@ -92,14 +81,14 @@ def rating_post(request):
         form = RatingForm(request.POST)
         if form.is_valid():
             Rating = form.save(commit=False)  # no guarda aún en BD
-            Rating.autor = request.user       # asigna el usuario actual
+            Rating.author = request.user       # asigna el usuario actual
             Rating.pk += request.pk           # asigna el articulo a valorar
             Rating.save()
             messages.success(request, '¡Artículo valorado exitosamente!')
             return redirect('detalle_Item', pk=Item.pk)
     else:
         form = RatingForm()
-    return render(request, 'tienda/form.html', {'form': form, 'accion': 'Crear'})
+    return render(request, 'tienda/rating_form.html', {'form': form, 'accion': 'Crear'})
 
 # # ── UPDATE: Editar valoracion ────────────────────────────────────────────────
 @login_required
@@ -113,7 +102,7 @@ def rating_edit(request, pk):
             return redirect('detalle_Item', pk=Item.pk)
     else:
         form = RatingForm(instance=Item)
-    return render(request, 'tienda/form.html', {'form': form, 'accion': 'Editar', 'Item': Item})
+    return render(request, 'tienda/rating_form.html', {'form': form, 'accion': 'Editar', 'Item': Item})
 
 # ── DELETE: Eliminar valoracuib ──────────────────────────────────────────────
 @login_required
@@ -123,4 +112,4 @@ def rating_remove(request, pk):
         Rating.delete()
         messages.success(request, 'Valoracion eliminada.')
         return redirect('lista_Items')
-    return render(request, 'tienda/confirmar_eliminar.html', {'Valoración': Rating})
+    return render(request, 'tienda/remove_confirm_rating.html', {'Ratings': Rating})
