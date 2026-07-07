@@ -60,7 +60,7 @@
     {% if user == r.author %}
     <div class="mt-4 d-flex gap-2">
         <a href="{% url 'edit_ratings' r.pk Item.pk %}" class="btn btn-outline-secondary">Editar</a>
-        <a href="{% url 'remove_ratings' r.pk %}" class="btn btn-outline-danger">Eliminar</a>
+        <a href="{% url 'remove_ratings' r.pk Item.pk%}" class="btn btn-outline-danger">Eliminar</a>
     </div>
     {% endif %}
     

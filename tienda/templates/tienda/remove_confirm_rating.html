@@ -4,7 +4,7 @@
 <div class="row justify-content-center">
     <div class="col-md-6 text-center">
         <h2 class="text-danger">¿Eliminar valoración?</h2>
-        <p class="lead">Estás a punto de eliminar permanentemente:</p>
+        <p class="lead">Estás a punto de eliminar permanentemente la valoración de:</p>
         <blockquote class="blockquote">
             <p>"{{ Item.itemname }}"</p>
         </blockquote>
@@ -12,7 +12,7 @@
         <form method="post" class="mt-3">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger me-2">Sí, eliminar</button>
-            <a href="{% url 'detail_items' item.pk %}" class="btn btn-secondary">Cancelar</a>
+            <a href="{% url 'detail_items' Item.pk %}" class="btn btn-secondary">Cancelar</a>
         </form>
     </div>
 </div>

@@ -109,10 +109,11 @@ def rating_edit(request, pk, item_pk):
 
 # ── DELETE: Eliminar valoracuib ──────────────────────────────────────────────
 @login_required
-def rating_remove(request, pk):
+def rating_remove(request, pk, item_pk):
     rating = get_object_or_404(Rating, pk=pk, author=request.user)
+    item = get_object_or_404(Item, pk=item_pk)
     if request.method == 'POST':
         rating.delete()
         messages.success(request, 'Valoracion eliminada.')
         return redirect('list_items')
-    return render(request, 'tienda/remove_confirm_rating.html', {'Ratings': rating})
+    return render(request, 'tienda/remove_confirm_rating.html', {'Ratings': rating, 'Item': item})
