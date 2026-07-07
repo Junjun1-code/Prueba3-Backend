@@ -94,24 +94,25 @@ def rating_post(request, pk):
 
 # # ── UPDATE: Editar valoracion ────────────────────────────────────────────────
 @login_required
-def rating_edit(request, pk):
-    Rating = get_object_or_404(Rating, pk=pk, author=request.user)  # solo el autor puede editar
+def rating_edit(request, pk, item_pk):
+    rating = get_object_or_404(Rating, pk=pk, author=request.user)  # solo el autor puede editar
+    item = get_object_or_404(Item, pk=item_pk)
     if request.method == 'POST':
-        form = RatingForm(request.POST, instance=Rating)
+        form = RatingForm(request.POST, instance=rating)
         if form.is_valid():
             form.save()
             messages.success(request, '¡Artículo actualizado!')
-            return redirect('detalle_Item', pk=Item.pk)
+            return redirect('detail_items', pk=item.pk)
     else:
-        form = RatingForm(instance=Item)
-    return render(request, 'tienda/rating_form.html', {'form': form, 'accion': 'Editar', 'Item': Item})
+        form = RatingForm(instance=rating)
+    return render(request, 'tienda/rating_form.html', {'form': form, 'accion': 'Editar', 'Item': item})
 
 # ── DELETE: Eliminar valoracuib ──────────────────────────────────────────────
 @login_required
 def rating_remove(request, pk):
-    Rating = get_object_or_404(Rating, pk=pk, autor=request.user)
+    rating = get_object_or_404(Rating, pk=pk, author=request.user)
     if request.method == 'POST':
-        Rating.delete()
+        rating.delete()
         messages.success(request, 'Valoracion eliminada.')
-        return redirect('lista_Items')
-    return render(request, 'tienda/remove_confirm_rating.html', {'Ratings': Rating})
+        return redirect('list_items')
+    return render(request, 'tienda/remove_confirm_rating.html', {'Ratings': rating})

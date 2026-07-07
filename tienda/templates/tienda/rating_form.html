@@ -3,7 +3,7 @@
 {% block contenido %}
 <div class="row justify-content-center">
     <div class="col-md-8">
-        <h1 class="mb-4">{{ accion }} Valoracion </h1>
+        <h1 class="mb-4">{{ accion }} Valoracion de {{ Item.itemname }}</h1>
         <form method="post">
             {% csrf_token %}
             <div class="mb-3">
