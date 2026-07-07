@@ -36,34 +36,35 @@
 {% endif %}
 
 <a href="{% url 'list_items' %}" class="btn btn-link mt-3">← Volver a la lista</a>
-{% endblock %}
 
-{% block Ratings %}
+{% if Ratings %}
 <section class="container mt-4">
-    {% for Rating in Ratings %}
-        <h4>{{ Rating.author.username }}</h4>
-
-        <div class="mt-3">
-            {% for _ in Rating.range %}
-                ⭐
-            {% endfor %}
-        </div>
-
-        <div class="mt-3">
-            {{ Rating.comments|linebreaks }}
-        </div>
-
-        {% if user == Rating.author %}
-        <div class="mt-4 d-flex gap-2">
-            <a href="{% url 'edit_ratings' Rating.pk %}" class="btn btn-outline-secondary">Editar</a>
-            <a href="{% url 'remove_ratings' Rating.pk %}" class="btn btn-outline-danger">Eliminar</a>
-        </div>
-        {% endif %}
-
-        <hr>
+    {% for r in Ratings %}
+    <h4>{{ r.author.username }}</h4>
+    
+    <div class="mt-3">
+        {% for _ in r.star_range %}
+        ⭐
+        {% endfor %}
+    </div>
+    
+    <div class="mt-3">
+        {{ r.comments|linebreaks }}
+    </div>
+    
+    {% if user == r.author %}
+    <div class="mt-4 d-flex gap-2">
+        <a href="{% url 'edit_ratings' r.pk %}" class="btn btn-outline-secondary">Editar</a>
+        <a href="{% url 'remove_ratings' r.pk %}" class="btn btn-outline-danger">Eliminar</a>
+    </div>
+    {% endif %}
+    
+    <hr>
     {% empty %}
-        <p>No hay valoraciones aún.</p>
     {% endfor %}
 </section>
+{% else %}
+<p>No hay valoraciones aún.</p>
+{% endif %}
+
 {% endblock %}
-    

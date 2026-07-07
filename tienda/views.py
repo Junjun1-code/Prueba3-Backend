@@ -23,11 +23,12 @@ def item_detail(request, pk):
     if not item.published and item.author != request.user:
         messages.error(request, 'Este artículo no está disponible.')
         return redirect('list_items')
-    
-    # rating = get_object_or_404(Ratings, fk=pk )
-    # return render(request, 'blog/detalle.html', {'Item': Item, 'Ratings': Ratings })
-    
-    return render(request, 'tienda/item_detail.html', {'Item': item})
+
+    ratings = Rating.objects.filter(rateditem=item)
+    for rating in ratings:
+        rating.star_range = range(rating.stars)
+
+    return render(request, 'tienda/item_detail.html', {'Item': item, 'Ratings': ratings})
 
 # ── CREATE: Crear artículo ────────────────────────────────────────────────
 @login_required  # solo usuarios autenticados pueden crear
